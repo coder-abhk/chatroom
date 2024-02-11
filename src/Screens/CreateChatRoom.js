@@ -33,7 +33,7 @@ const CreateChatRoom = () => {
       <button
         type="button"
         onClick={handleCreateRoom}
-        className="btn bg-sky-500 px-5 py-3 text-white mx-auto mt-4 rounded"
+        className="btn bg-[#3eb798] px-5 py-3 text-white mx-auto mt-4 rounded"
       >
         Join Room
       </button>

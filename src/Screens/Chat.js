@@ -30,6 +30,7 @@ const Chat = () => {
       text: message,
       createdAt: serverTimestamp(),
       user: auth?.currentUser?.displayName,
+      photo: auth?.currentUser?.photoURL,
       room: location.state.room,
     });
     scroll.current.scrollIntoView({ behavior: "smooth" });
@@ -59,25 +60,28 @@ const Chat = () => {
   }, []);
 
   return (
-    <div className="max-w-xl mx-auto p-5 mt-5 bg-white rounded">
-      <h1 className="text-center font-bold bg-sky-50 p-4 mb-5">
-        Room: <span className="font-normal">{location.state.room}</span>
+    <div className="max-w-xl mx-auto p-5 mt-5 bg-white rounded shadow">
+      <h1 className="text-center bg-[#fafafa] p-4 mb-5">
+        Room: <span className="font-bold">{location.state.room}</span>
       </h1>
       <div className="messages max-h-[320px] overflow-auto p-4">
         {messages.map((message) => (
           <div
             key={message.id}
-            className={`text-start text-sm ${
+            className={`text-sm my-2 ${
               auth?.currentUser?.displayName === message.user
                 ? "text-end"
                 : "text-start"
             }`}
           >
-            <span className="font-bold">
+            <span className="flex-inline align-center gap-2 font-bold">
+              <img
+                className="max-h-[24px] max-w-[24px] rounded-full ms-auto"
+                src={message.photo}
+              />
               {message.user === auth?.currentUser?.displayName
                 ? "You"
                 : message.user}
-              :
             </span>
             <br />
             <span>{message.text}</span>
@@ -87,19 +91,19 @@ const Chat = () => {
       </div>
       <form className="grid grid-cols-12 gap-2 mt-4" onSubmit={sendMessage}>
         <input
-          className="col-span-6 form-input w-full border px-5 py-3 rounded text-start"
+          className="col-span-8 form-input w-full border px-5 py-3 rounded text-start"
           value={message}
           onChange={handleMessage}
           placeholder="Your message"
         />
         <button
           type="submit"
-          className="col-span-3 btn bg-green-500 px-5 py-3 rounded text-white font-bold"
+          className="col-span-4 btn bg-[#3eb798] px-5 py-3 rounded text-white font-bold"
         >
           Send
         </button>
         <button
-          className="col-span-3 btn bg-[#e11d48] text-white text-sm font-bold px-5 py-3 rounded"
+          className="col-span-12 btn bg-[#000] text-white text-sm font-bold px-5 py-3 rounded"
           onClick={handleLogout}
         >
           Log Out

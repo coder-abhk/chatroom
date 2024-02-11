@@ -11,7 +11,7 @@ const App = () => {
   const [user, setUser] = useState(null);
   return (
     <AuthContext.Provider value={{ user, setUser }}>
-      <div className="min-h-screen bg-sky-100">
+      <div className="min-h-screen bg-[#f1f1f1]">
         <Header />
         <div className="mx-4">
           <Routes>

@@ -25,7 +25,7 @@ const Login = () => {
   };
 
   return (
-    <div className="max-w-xl bg-white mx-auto my-10 p-10 rounded">
+    <div className="max-w-xl bg-white mx-auto my-10 p-10 rounded shadow">
       <h1 className="text-center font-bold text-xl">Login</h1>
       <p className="text-center my-5">To chat you need an account first.</p>
       <GoogleButton className="mx-auto" onClick={handleLogin} />
