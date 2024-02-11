@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { db } from "../config/firebase";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
 const CreateChatRoom = () => {
   const [room, setRoom] = useState("");
@@ -11,14 +9,10 @@ const CreateChatRoom = () => {
     setRoom(e.target.value.trimStart());
   };
 
-  const handleCreateRoom = async () => {
-    if (room.length === 0) return;
-    await addDoc(collection(db, "room"), {
-      name: room,
-      createdAt: serverTimestamp(),
-    });
-    setRoom("");
-    navigate("/chat", { state: { room } });
+  const handleCreateRoom = () => {
+    if (room !== "")
+      navigate("/chat", { state: { room: room.trim().toLocaleLowerCase() } });
+    else return;
   };
 
   return (

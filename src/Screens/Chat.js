@@ -16,9 +16,9 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const location = useLocation();
-  const messagesRef = collection(db, "messages");
   const navigate = useNavigate();
   const scroll = useRef();
+  const messagesRef = collection(db, "messages");
 
   const handleMessage = (e) => {
     setMessage(e.target.value.trimStart());
