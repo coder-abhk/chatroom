@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route } from "react-router-dom";
+import { createContext, useState } from "react";
+import Header from "./components/Header";
+import Login from "./Screens/Login";
+import CreateChatRoom from "./Screens/CreateChatRoom";
+import Chat from "./Screens/Chat";
 
-function App() {
+export const AuthContext = createContext();
+
+const App = () => {
+  const [user, setUser] = useState(null);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthContext.Provider value={{ user, setUser }}>
+      <div className="min-h-screen bg-sky-100">
+        <Header />
+        <div className="mx-4">
+          <Routes>
+            <Route element={<Login />} path="/" />
+            <Route element={<CreateChatRoom />} path="/create-chat-room" />
+            <Route element={<Chat />} path="/chat" />
+          </Routes>
+        </div>
+      </div>
+    </AuthContext.Provider>
   );
-}
+};
 
 export default App;
