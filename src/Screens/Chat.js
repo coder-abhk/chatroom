@@ -76,7 +76,9 @@ const Chat = () => {
           >
             <span className="flex-inline align-center gap-2 font-bold">
               <img
-                className="max-h-[24px] max-w-[24px] rounded-full ms-auto"
+                className={`max-h-[24px] max-w-[24px] rounded-full ${
+                  auth?.currentUser?.displayName === message.user && "ms-auto"
+                }`}
                 src={message.photo}
               />
               {message.user === auth?.currentUser?.displayName
