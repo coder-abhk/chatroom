@@ -33,7 +33,6 @@ const Chat = () => {
       photo: auth?.currentUser?.photoURL,
       room: location.state.room,
     });
-    scroll.current.scrollIntoView({ behavior: "smooth" });
     setMessage("");
   };
 
@@ -53,6 +52,10 @@ const Chat = () => {
       let msgs = [];
       snapshot.forEach((doc) => {
         msgs.push({ ...doc.data(), id: doc.id });
+      });
+      snapshot.docChanges((change) => {
+        console.log(change);
+        scroll.current.scrollIntoView({ behavior: "smooth" });
       });
       setMessages(msgs);
     });
