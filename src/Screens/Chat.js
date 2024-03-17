@@ -7,6 +7,7 @@ import {
   onSnapshot,
   orderBy,
   addDoc,
+  limit,
   serverTimestamp,
 } from "firebase/firestore";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -57,7 +58,8 @@ const Chat = () => {
     const q = query(
       messagesRef,
       where("room", "==", location.state.room),
-      orderBy("createdAt")
+      orderBy("createdAt"),
+      (limit = 15)
     );
     const unsubscribe = onSnapshot(q, (snapshot) => {
       let msgs = [];
