@@ -105,7 +105,6 @@ const Chat = () => {
           </div>
         )}
         {!loading &&
-          messages?.length > 0 &&
           messages.map((message) => (
             <div
               key={message.id}
