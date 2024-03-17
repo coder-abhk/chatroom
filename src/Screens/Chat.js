@@ -65,6 +65,7 @@ const Chat = () => {
         msgs.push({ ...doc.data(), id: doc.id });
       });
       setMessages(msgs);
+      msgs.length > 0 && setTimeout(scrollToBottom, 1000);
       snapshot.docChanges().forEach((change) => {
         if (change.type === "added") {
           scrollToBottom();
