@@ -20,6 +20,9 @@ const Chat = () => {
   const scroll = useRef();
   const messagesRef = collection(db, "messages");
 
+  const scrollToBottom = () =>
+    scroll.current?.scrollIntoView({ behavior: "smooth" });
+
   const handleMessage = (e) => {
     setMessage(e.target.value.trimStart());
   };
@@ -33,8 +36,8 @@ const Chat = () => {
       photo: auth?.currentUser?.photoURL,
       room: location.state.room,
     });
-    scroll.current.scrollIntoView({ behavior: "smooth" });
     setMessage("");
+    scrollToBottom();
   };
 
   const handleLogout = () => {
@@ -55,7 +58,7 @@ const Chat = () => {
         msgs.push({ ...doc.data(), id: doc.id });
       });
       setMessages(msgs);
-      
+      scrollToBottom();
     });
     return () => unsubscribe;
   }, []);
