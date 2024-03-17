@@ -21,7 +21,7 @@ const Chat = () => {
   const messagesRef = collection(db, "messages");
 
   const scrollToBottom = () =>
-    scroll.current?.scrollIntoView({ behavior: "smooth" });
+    scroll.current?.scrollIntoView({ behavior: "smooth", block: "end" });
 
   const handleMessage = (e) => {
     setMessage(e.target.value.trimStart());
@@ -37,7 +37,6 @@ const Chat = () => {
       room: location.state.room,
     });
     setMessage("");
-    scrollToBottom();
   };
 
   const handleLogout = () => {
