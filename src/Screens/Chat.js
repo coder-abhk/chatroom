@@ -11,6 +11,7 @@ import {
 } from "firebase/firestore";
 import { useLocation, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
+import { Oval } from "react-loader-spinner";
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
@@ -20,8 +21,14 @@ const Chat = () => {
   const scroll = useRef();
   const messagesRef = collection(db, "messages");
 
-  const scrollToBottom = () =>
-    scroll.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  const scrollToBottom = () => {
+    scroll.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+      inline: "center",
+      alignToTop: false,
+    });
+  };
 
   const handleMessage = (e) => {
     setMessage(e.target.value.trimStart());
@@ -36,6 +43,7 @@ const Chat = () => {
       photo: auth?.currentUser?.photoURL,
       room: location.state.room,
     });
+    scrollToBottom();
     setMessage("");
   };
 
@@ -57,7 +65,11 @@ const Chat = () => {
         msgs.push({ ...doc.data(), id: doc.id });
       });
       setMessages(msgs);
-      scrollToBottom();
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === "added") {
+          scrollToBottom();
+        }
+      });
     });
     return () => unsubscribe;
   }, []);
@@ -67,32 +79,46 @@ const Chat = () => {
       <h1 className="text-center bg-[#fafafa] p-4 mb-5">
         Room: <span className="font-bold">{location.state.room}</span>
       </h1>
-      <div className="messages max-h-[320px] overflow-auto p-4">
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`text-sm my-2 ${
-              auth?.currentUser?.displayName === message.user
-                ? "text-end"
-                : "text-start"
-            }`}
-          >
-            <span className="flex-inline align-center gap-2 font-bold">
-              <img
-                className={`max-h-[24px] max-w-[24px] rounded-full ${
-                  auth?.currentUser?.displayName === message.user && "ms-auto"
-                }`}
-                src={message.photo}
-              />
-              {message.user === auth?.currentUser?.displayName
-                ? "You"
-                : message.user}
-            </span>
-            <br />
-            <span>{message.text}</span>
+      <div className="messages h-[320px] overflow-scroll p-4">
+        {messages?.length === 0 && (
+          <div className="flex justify-center items-center h-[100%]">
+            <Oval
+              visible={true}
+              height="25"
+              width="25"
+              color="#3eb798"
+              ariaLabel="oval-loading"
+              wrapperStyle={{}}
+              wrapperClass=""
+            />
           </div>
-        ))}
-        <span ref={scroll}></span>
+        )}
+        {messages?.length > 0 &&
+          messages.map((message) => (
+            <div
+              key={message.id}
+              className={`text-sm my-2 ${
+                auth?.currentUser?.displayName === message.user
+                  ? "text-end"
+                  : "text-start"
+              }`}
+            >
+              <span className="flex-inline align-center gap-2 font-bold">
+                <img
+                  className={`max-h-[24px] max-w-[24px] rounded-full ${
+                    auth?.currentUser?.displayName === message.user && "ms-auto"
+                  }`}
+                  src={message.photo}
+                />
+                {message.user === auth?.currentUser?.displayName
+                  ? "You"
+                  : message.user}
+              </span>
+              <br />
+              <span>{message.text}</span>
+            </div>
+          ))}
+        <div ref={scroll}></div>
       </div>
       <form className="grid grid-cols-12 gap-2 mt-4" onSubmit={sendMessage}>
         <input
