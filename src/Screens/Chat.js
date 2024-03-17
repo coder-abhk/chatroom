@@ -59,7 +59,7 @@ const Chat = () => {
       messagesRef,
       where("room", "==", location.state.room),
       orderBy("createdAt"),
-      (limit = 15)
+      limit(15)
     );
     const unsubscribe = onSnapshot(q, (snapshot) => {
       let msgs = [];
