@@ -15,6 +15,7 @@ import { signOut } from "firebase/auth";
 import { Oval } from "react-loader-spinner";
 
 const Chat = () => {
+  const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const location = useLocation();
@@ -55,6 +56,7 @@ const Chat = () => {
   };
 
   useEffect(() => {
+    setLoading(true);
     const q = query(
       messagesRef,
       where("room", "==", location.state.room),
@@ -66,8 +68,14 @@ const Chat = () => {
       snapshot.forEach((doc) => {
         msgs.push({ ...doc.data(), id: doc.id });
       });
-      setMessages(msgs);
+      if (msgs.length > 0) {
+        setLoading(false);
+      } else {
+        if (snapshot.empty) setLoading(false);
+      }
+
       msgs.length > 0 && setTimeout(scrollToBottom, 1000);
+      setMessages(msgs);
       snapshot.docChanges().forEach((change) => {
         if (change.type === "added") {
           scrollToBottom();
@@ -83,7 +91,7 @@ const Chat = () => {
         Room: <span className="font-bold">{location.state.room}</span>
       </h1>
       <div className="messages h-[320px] overflow-scroll p-4">
-        {messages?.length === 0 && (
+        {loading && (
           <div className="flex justify-center items-center h-[100%]">
             <Oval
               visible={true}
@@ -96,7 +104,8 @@ const Chat = () => {
             />
           </div>
         )}
-        {messages?.length > 0 &&
+        {!loading &&
+          messages?.length > 0 &&
           messages.map((message) => (
             <div
               key={message.id}
